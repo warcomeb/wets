@@ -55,7 +55,7 @@ typedef struct _WETS_Events
 {
     WETS_Event_t event[WETS_MAX_EVENTS_PER_PRIORITY];
 
-    uint32_t     eventStatus;
+    uint32_t     status;
 
 } WETS_Events_t;
 
@@ -64,6 +64,39 @@ static WETS_Events_t mEvents[WETS_MAX_PRIORITY_LEVEL];
 static uint8_t mEventsCount[WETS_MAX_PRIORITY_LEVEL] = {0};
 
 static bool mNewEventOccurred = FALSE;
+
+/*!
+ * TODO
+ */
+static WETS_Event_t* findEvent (uint8_t priority, uint32_t event)
+{
+    for (uint8_t i = 0; i < WETS_MAX_EVENTS_PER_PRIORITY; ++i)
+    {
+        if (mEvents[priority].event[i].event == event)
+        {
+            return &mEvents[priority].event[i];
+        }
+    }
+    return NULL;
+}
+
+/*!
+ * TODO
+ */
+static WETS_Event_t* findMostImportantEvent (uint8_t priority)
+{
+    uint32_t event = 0x80000000ul;
+
+    for (uint8_t i = 0; i < WETS_MAX_EVENTS_PER_PRIORITY; ++i)
+    {
+        if ((mEvents[priority].status & event) > 0)
+        {
+            return findEvent(priority,event);
+        }
+        event >>= 1;
+    }
+    return NULL;
+}
 
 WETS_Error_t WETS_addEvent (pEventCallback cb, uint8_t priority, uint32_t event)
 {
@@ -87,7 +120,7 @@ WETS_Error_t WETS_addEvent (pEventCallback cb, uint8_t priority, uint32_t event)
                     mEvents[priority].event[count].cb    = cb;
                     mEvents[priority].event[count].event = event;
 
-                    mEvents[priority].eventStatus |= event;
+                    mEvents[priority].status |= event;
 
 //                    CRITICAL_SECTION_END();
 
@@ -106,7 +139,7 @@ bool WETS_isEvent (uint8_t priority, uint32_t event)
     ohiassert(event > 0ul);
     ohiassert(priority < WETS_MAX_PRIORITY_LEVEL);
 
-    return ((mEvents[priority].eventStatus & event) > 0ul);
+    return ((mEvents[priority].status & event) > 0ul);
 }
 
 WETS_Error_t WETS_removeEvent (uint8_t priority, uint32_t event)
@@ -121,7 +154,7 @@ WETS_Error_t WETS_removeEvent (uint8_t priority, uint32_t event)
             for (uint8_t i = 0; i < WETS_MAX_EVENTS_PER_PRIORITY; ++i)
             {
                 if ((mEvents[priority].event[i].event != WETS_NO_EVENT) &&
-                    ((mEvents[priority].event[i].event & event) > 0))
+                   ((mEvents[priority].event[i].event & event) > 0))
                 {
 //                    CRITICAL_SECTION_BEGIN();
 
@@ -129,7 +162,7 @@ WETS_Error_t WETS_removeEvent (uint8_t priority, uint32_t event)
                     mEvents[priority].event[i].event = WETS_NO_EVENT;
                     mEvents[priority].event[i].cb    = NULL;
 
-                    mEvents[priority].eventStatus &= ~event;
+                    mEvents[priority].status &= ~event;
 
 //                    CRITICAL_SECTION_END();
 
@@ -144,4 +177,54 @@ WETS_Error_t WETS_removeEvent (uint8_t priority, uint32_t event)
         }
     }
     return WETS_ERROR_WRONG_PARAMS;
+}
+
+
+void WETS_init (void)
+{
+    // Initialize timers
+//    initTimer();
+}
+
+void WETS_loop (void)
+{
+    for (;;)
+    {
+#if (WETS_USE_LOW_POWER_MODE == 1)
+        bool lowPowerMode = TRUE;
+#endif
+
+        for (uint8_t i = 0; i < WETS_MAX_PRIORITY_LEVEL; ++i)
+        {
+            if (mEvents[i].status > 0)
+            {
+                WETS_Event_t* event = findMostImportantEvent(i);
+                if (event != NULL)
+                {
+//                    CRITICAL_SECTION_BEGIN();
+                    uint32_t status = mEvents[i].status;
+                    mEvents[i].status = 0;
+//                    CRITICAL_SECTION_END();
+
+                    status = event->cb(status);
+
+//                    CRITICAL_SECTION_BEGIN();
+                    // Delete reference to this event...
+                    event->event       = WETS_NO_EVENT;
+                    event->cb          = NULL;
+                    mEvents[i].status |= status;
+//                    CRITICAL_SECTION_END();
+                    break;
+                }
+            }
+        }
+
+
+#if (WETS_USE_LOW_POWER_MODE == 1)
+        if (lowPowerMode)
+        {
+            // TODO: call low power mode enable function!
+        }
+#endif
+    }
 }

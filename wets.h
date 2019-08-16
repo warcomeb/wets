@@ -49,20 +49,6 @@ extern "C" {
  */
 
 
-/*!
- * \defgroup WETS_System WETS System Management
- * \ingroup  WETS
- * \{
- */
-
-void WETS_init (void);
-
-void WETS_loop (void);
-
-/*!
- * \}
- */
-
 #ifdef __cplusplus
 }
 #endif

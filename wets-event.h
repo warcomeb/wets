@@ -60,6 +60,18 @@ bool WETS_isEvent (uint8_t priority, uint32_t event);
  * \}
  */
 
+/*!
+ * \defgroup WETS_System WETS System Management
+ * \ingroup  WETS
+ * \{
+ */
 
+void WETS_init (void);
+
+void WETS_loop (void);
+
+/*!
+ * \}
+ */
 
 #endif // __WARCOMEB_WETS_EVENT_H
