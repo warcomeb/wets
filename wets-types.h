@@ -73,6 +73,9 @@ typedef enum _WETS_Errors
  */
 typedef uint32_t (*pEventCallback)(uint32_t event);
 
+#define WETS_NO_EVENT                            0xFFFFFFFF
+#define WETS_NO_PRIORITY                         0xFF
+
 /*!
  * \}
  */

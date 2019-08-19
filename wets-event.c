@@ -37,8 +37,6 @@
 #define WETS_MAX_PRIORITY_LEVEL                  4u
 #endif
 
-#define WETS_NO_EVENT                            0xFFFFFFFF
-
 /*!
  * A event class.
  */
@@ -60,8 +58,6 @@ typedef struct _WETS_Events
 } WETS_Events_t;
 
 static WETS_Events_t mEvents[WETS_MAX_PRIORITY_LEVEL];
-
-static uint8_t mEventsCount[WETS_MAX_PRIORITY_LEVEL] = {0};
 
 static bool mNewEventOccurred = FALSE;
 
@@ -104,7 +100,7 @@ WETS_Error_t WETS_addEvent (pEventCallback cb, uint8_t priority, uint32_t event)
     ohiassert(priority < WETS_MAX_PRIORITY_LEVEL);
     ohiassert(cb != NULL);
 
-    if ((cb =! NULL) && (priority < WETS_MAX_PRIORITY_LEVEL) && (event > 0ul))
+    if ((cb != NULL) && (priority < WETS_MAX_PRIORITY_LEVEL) && (event > 0ul))
     {
         if (!WETS_isEvent(priority,event))
         {
@@ -117,8 +113,8 @@ WETS_Error_t WETS_addEvent (pEventCallback cb, uint8_t priority, uint32_t event)
                     // Add event...
                     mNewEventOccurred = TRUE;
 
-                    mEvents[priority].event[count].cb    = cb;
-                    mEvents[priority].event[count].event = event;
+                    mEvents[priority].event[i].cb    = cb;
+                    mEvents[priority].event[i].event = event;
 
                     mEvents[priority].status |= event;
 
