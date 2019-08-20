@@ -30,6 +30,7 @@
  */
 
 #include "wets-event.h"
+#include "wets-delay.h"
 
 #define WETS_MAX_EVENTS_PER_PRIORITY             32u
 
@@ -60,6 +61,13 @@ typedef struct _WETS_Events
 static WETS_Events_t mEvents[WETS_MAX_PRIORITY_LEVEL];
 
 static bool mNewEventOccurred = FALSE;
+
+/*!
+ *
+ */
+static uint32_t mCurrentTime = 0;
+
+static bool mIsTimerFired = FALSE;
 
 /*!
  * TODO
@@ -175,6 +183,14 @@ WETS_Error_t WETS_removeEvent (uint8_t priority, uint32_t event)
     return WETS_ERROR_WRONG_PARAMS;
 }
 
+bool WETS_isAnyEvent (void)
+{
+    for (uint8_t i = 0; i < WETS_MAX_PRIORITY_LEVEL; ++i)
+    {
+        if (mEvents[i].status > 0ul) return TRUE;
+    }
+    return FALSE;
+}
 
 void WETS_init (void)
 {
@@ -215,12 +231,36 @@ void WETS_loop (void)
             }
         }
 
-
-#if (WETS_USE_LOW_POWER_MODE == 1)
-        if (lowPowerMode)
+        while (!WETS_isAnyEvent())
         {
-            // TODO: call low power mode enable function!
+            // TODO: go to sleep!
+
+//#if (WETS_USE_LOW_POWER_MODE == 1)
+//        if (lowPowerMode)
+//        {
+//            // TODO: call low power mode enable function!
+//        }
+//#endif
+
+            if (mIsTimerFired)
+            {
+                WETS_updateDelayEvents();
+//                WETS_updateCyclicEvents();
+                mIsTimerFired = FALSE;
+            }
         }
-#endif
     }
+}
+
+void WETS_timerIsrCallback (void * unused)
+{
+//    CRITICAL_SECTION_BEGIN();
+    mCurrentTime += WETS_ISR_PERIOD_ms;
+    mIsTimerFired = TRUE;
+//    CRITICAL_SECTION_END();
+}
+
+uint32_t WETS_getCurrentTime (void)
+{
+    return mCurrentTime;
 }

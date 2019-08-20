@@ -74,9 +74,18 @@ WETS_Error_t WETS_removeDelayEvent (uint8_t priority,
 		                            uint32_t event);
 
 /*!
+ *
+ */
+void WETS_removeAllDelayEvents (void);
+
+/*!
+ *
+ */
+void WETS_updateDelayEvents (void);
+
+/*!
  * \}
  */
-
 
 
 #endif // __WARCOMEB_WETS_DELAY_H

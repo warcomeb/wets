@@ -71,6 +71,16 @@ void WETS_init (void);
 void WETS_loop (void);
 
 /*!
+ * The callback for the timer that manage WETS scheduler.
+ *
+ * \note The timer must be a Low Power Timer usable to wake-up the
+ *       microcontroller if the user wants send to sleep the device.
+ */
+void WETS_timerIsrCallback (void * unused);
+
+uint32_t WETS_getCurrentTime (void);
+
+/*!
  * \}
  */
 

@@ -54,6 +54,13 @@
 #define WETS_USE_LOW_POWER_MODE                  1u
 #endif
 
+#if !defined (WETS_ISR_PERIOD_ms)
+#define WETS_ISR_PERIOD_ms                       5u
+#endif
+
+/*!
+ * List of all possible errors.
+ */
 typedef enum _WETS_Errors
 {
     WETS_ERROR_SUCCESS           = 0x0000,
