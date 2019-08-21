@@ -75,6 +75,17 @@ WETS_Error_t WETS_removeDelayEvent (uint8_t priority,
 
 /*!
  *
+ *
+ * \param[in] priority: The priority group for the event.
+ * \param[in]    event: The event to be notified.
+ * \param[in]  timeout: The new timeout for the event.
+ */
+WETS_Error_t WETS_updateDelayEvent (uint8_t priority,
+                                    uint32_t event,
+                                    uint32_t timeout);
+
+/*!
+ *
  */
 void WETS_removeAllDelayEvents (void);
 

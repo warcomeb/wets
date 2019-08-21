@@ -49,7 +49,6 @@
  * \{
  */
 
-
 #if !defined (WETS_USE_LOW_POWER_MODE)
 #define WETS_USE_LOW_POWER_MODE                  1u
 #endif
@@ -58,21 +57,26 @@
 #define WETS_ISR_PERIOD_ms                       5u
 #endif
 
+#if !defined (WETS_MAX_PRIORITY_LEVEL)
+#define WETS_MAX_PRIORITY_LEVEL                  4u
+#endif
+
 /*!
  * List of all possible errors.
  */
 typedef enum _WETS_Errors
 {
-    WETS_ERROR_SUCCESS           = 0x0000,
+    WETS_ERROR_SUCCESS            = 0x0000,
 
-    WETS_ERROR_WRONG_PARAMS      = 0x0100,
+    WETS_ERROR_WRONG_PARAMS       = 0x0100,
 
-    WETS_ERROR_NO_EVENT_FOUND    = 0x0200,
-    WETS_ERROR_EVENT_BUFFER_FULL = 0x0201,
-    WETS_ERROR_EVENT_JUST_SET    = 0x0202,
+    WETS_ERROR_NO_EVENT_FOUND     = 0x0200,
+    WETS_ERROR_EVENT_BUFFER_FULL  = 0x0201,
+    WETS_ERROR_EVENT_JUST_SET     = 0x0202,
 
-    WETS_ERROR_START_TIMER_FAIL,
-    WETS_ERROR_STOP_TIMER_FAIL,
+    WETS_ERROR_NO_TIMER_AVAILABLE = 0x0300,
+    WETS_ERROR_NO_TIMER_FOUND     = 0x0301,
+    WETS_ERROR_REMOVE_TIMER_FAIL,
 } WETS_Error_t;
 
 /*!

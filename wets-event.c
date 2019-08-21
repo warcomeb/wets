@@ -34,10 +34,6 @@
 
 #define WETS_MAX_EVENTS_PER_PRIORITY             32u
 
-#if !defined (WETS_MAX_PRIORITY_LEVEL)
-#define WETS_MAX_PRIORITY_LEVEL                  4u
-#endif
-
 /*!
  * A event class.
  */
@@ -213,19 +209,20 @@ void WETS_loop (void)
                 WETS_Event_t* event = findMostImportantEvent(i);
                 if (event != NULL)
                 {
-//                    CRITICAL_SECTION_BEGIN();
-                    uint32_t status = mEvents[i].status;
+                    uint32_t status = 0;
+                    CRITICAL_SECTION_BEGIN();
+                    status = mEvents[i].status;
                     mEvents[i].status = 0;
-//                    CRITICAL_SECTION_END();
+                    CRITICAL_SECTION_END();
 
                     status = event->cb(status);
 
-//                    CRITICAL_SECTION_BEGIN();
+                    CRITICAL_SECTION_BEGIN();
                     // Delete reference to this event...
                     event->event       = WETS_NO_EVENT;
                     event->cb          = NULL;
                     mEvents[i].status |= status;
-//                    CRITICAL_SECTION_END();
+                    CRITICAL_SECTION_END();
                     break;
                 }
             }
@@ -254,10 +251,10 @@ void WETS_loop (void)
 
 void WETS_timerIsrCallback (void * unused)
 {
-//    CRITICAL_SECTION_BEGIN();
+    CRITICAL_SECTION_BEGIN();
     mCurrentTime += WETS_ISR_PERIOD_ms;
     mIsTimerFired = TRUE;
-//    CRITICAL_SECTION_END();
+    CRITICAL_SECTION_END();
 }
 
 uint32_t WETS_getCurrentTime (void)
