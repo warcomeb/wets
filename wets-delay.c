@@ -160,7 +160,37 @@ WETS_Error_t WETS_updateDelayEvent (uint8_t priority,
 
 WETS_Error_t WETS_removeDelayEvent (uint8_t priority, uint32_t event)
 {
-	return WETS_ERROR_SUCCESS;
+    System_Errors err = ERRORS_NO_ERROR;
+
+    err |= ohiassert(event > 0ul);
+    err |= ohiassert(priority < WETS_MAX_PRIORITY_LEVEL);
+
+    WETS_Timer_t* timer = NULL;
+
+    if (err == ERRORS_NO_ERROR)
+    {
+        timer = findTimer(priority, event);
+
+        // If a timer is available
+        if (timer != NULL)
+        {
+            // Update timeout
+            timer->cb       = NULL;
+            timer->event    = WETS_NO_EVENT;
+            timer->priority = WETS_NO_PRIORITY;
+            timer->timeout  = 0;
+
+            // Decrease the number of the current running timers.
+            mTimersRunning--;
+
+            return WETS_ERROR_SUCCESS;
+        }
+        else
+        {
+            return WETS_ERROR_NO_TIMER_FOUND;
+        }
+    }
+    return WETS_ERROR_WRONG_PARAMS;
 }
 
 void WETS_removeAllDelayEvents (void)
@@ -173,6 +203,9 @@ void WETS_removeAllDelayEvents (void)
         mTimers[i].priority = WETS_NO_PRIORITY;
         mTimers[i].timeout  = 0;
     }
+
+    // Clear the number of the current running timers.
+    mTimersRunning = 0;
 }
 
 void WETS_updateDelayEvents (void)
@@ -198,4 +231,9 @@ void WETS_updateDelayEvents (void)
             mTimersRunning--;
         }
     }
+}
+
+uint8_t WETS_getCurrentDelayEventsActive (void)
+{
+    return mTimersRunning;
 }

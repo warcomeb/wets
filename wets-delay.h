@@ -52,7 +52,7 @@
  * \param[in]    event: The event to be notified.
  * \param[in]  timeout: The timeout value in milli-second.
  * \return The function return:
- *         \ret WETS_ERROR_SUCCESS when the delayed event was created.
+ *         \arg \ref WETS_ERROR_SUCCESS when the delayed event was created.
  */
 WETS_Error_t WETS_addDelayEvent (pEventCallback cb,
                                  uint8_t priority,
@@ -68,7 +68,7 @@ WETS_Error_t WETS_addDelayEvent (pEventCallback cb,
  * \param[in] priority: The priority group for the event.
  * \param[in]    event: The event to be notified.
  * \return The function return:
- *         \ret WETS_ERROR_SUCCESS when the delayed event was removed.
+ *         \arg \ref WETS_ERROR_SUCCESS when the delayed event was removed.
  */
 WETS_Error_t WETS_removeDelayEvent (uint8_t priority,
 		                            uint32_t event);
@@ -85,14 +85,20 @@ WETS_Error_t WETS_updateDelayEvent (uint8_t priority,
                                     uint32_t timeout);
 
 /*!
- *
+ * TODO
  */
 void WETS_removeAllDelayEvents (void);
 
 /*!
- *
+ * TODO
  */
 void WETS_updateDelayEvents (void);
+
+
+/*!
+ * TODO
+ */
+uint8_t WETS_getCurrentDelayEventsActive (void);
 
 /*!
  * \}
