@@ -100,11 +100,13 @@ static WETS_Event_t* findMostImportantEvent (uint8_t priority)
 
 WETS_Error_t WETS_addEvent (pEventCallback cb, uint8_t priority, uint32_t event)
 {
-    ohiassert(event > 0ul);
-    ohiassert(priority < WETS_MAX_PRIORITY_LEVEL);
-    ohiassert(cb != NULL);
+    System_Errors err = ERRORS_NO_ERROR;
 
-    if ((cb != NULL) && (priority < WETS_MAX_PRIORITY_LEVEL) && (event > 0ul))
+    err |= ohiassert(event > 0ul);
+    err |= ohiassert(priority < WETS_MAX_PRIORITY_LEVEL);
+    err |= ohiassert(cb != NULL);
+
+    if (err == ERRORS_NO_ERROR)
     {
         if (!WETS_isEvent(priority,event))
         {
@@ -112,7 +114,7 @@ WETS_Error_t WETS_addEvent (pEventCallback cb, uint8_t priority, uint32_t event)
             {
                 if (mEvents[priority].event[i].event != WETS_NO_EVENT)
                 {
-//                    CRITICAL_SECTION_BEGIN();
+                    CRITICAL_SECTION_BEGIN();
 
                     // Add event...
                     mNewEventOccurred = TRUE;
@@ -122,7 +124,7 @@ WETS_Error_t WETS_addEvent (pEventCallback cb, uint8_t priority, uint32_t event)
 
                     mEvents[priority].status |= event;
 
-//                    CRITICAL_SECTION_END();
+                    CRITICAL_SECTION_END();
 
                     return WETS_ERROR_SUCCESS;
                 }
@@ -144,10 +146,12 @@ bool WETS_isEvent (uint8_t priority, uint32_t event)
 
 WETS_Error_t WETS_removeEvent (uint8_t priority, uint32_t event)
 {
-    ohiassert(event > 0ul);
-    ohiassert(priority < WETS_MAX_PRIORITY_LEVEL);
+    System_Errors err = ERRORS_NO_ERROR;
 
-    if ((priority < WETS_MAX_PRIORITY_LEVEL) && (event > 0ul))
+    err |= ohiassert(event > 0ul);
+    err |= ohiassert(priority < WETS_MAX_PRIORITY_LEVEL);
+
+    if (err == ERRORS_NO_ERROR)
     {
         if (WETS_isEvent(priority,event))
         {
@@ -156,7 +160,7 @@ WETS_Error_t WETS_removeEvent (uint8_t priority, uint32_t event)
                 if ((mEvents[priority].event[i].event != WETS_NO_EVENT) &&
                    ((mEvents[priority].event[i].event & event) > 0))
                 {
-//                    CRITICAL_SECTION_BEGIN();
+                    CRITICAL_SECTION_BEGIN();
 
                     // Clear event...
                     mEvents[priority].event[i].event = WETS_NO_EVENT;
@@ -164,7 +168,7 @@ WETS_Error_t WETS_removeEvent (uint8_t priority, uint32_t event)
 
                     mEvents[priority].status &= ~event;
 
-//                    CRITICAL_SECTION_END();
+                    CRITICAL_SECTION_END();
 
                     return WETS_ERROR_SUCCESS;
                 }
