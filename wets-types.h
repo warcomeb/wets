@@ -43,6 +43,11 @@
                                                  |(WARCOMEB_WETS_LIBRARY_VERSION_BUG        ))
 #define WARCOMEB_WETS_LIBRARY_TIME               0
 
+#ifndef __NO_PROFILES
+#include "board.h"
+#include "firmware.h"
+#endif
+
 /*!
  * \defgroup WETS_Types WETS Types
  * \ingroup  WETS

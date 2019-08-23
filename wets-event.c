@@ -251,7 +251,9 @@ void WETS_loop (void)
 
         while (!WETS_isAnyEvent())
         {
+            WETS_doBeforeSleep();
             // TODO: go to sleep!
+            WETS_doAfterWakeUp();
 
 //#if (WETS_USE_LOW_POWER_MODE == 1)
 //        if (lowPowerMode)
@@ -282,3 +284,14 @@ uint32_t WETS_getCurrentTime (void)
 {
     return mCurrentTime;
 }
+
+_weak void WETS_doBeforeSleep (void)
+{
+    // WARNING: Must be implemented
+}
+
+_weak void WETS_doAfterWakeUp (void)
+{
+    // WARNING: Must be implemented
+}
+

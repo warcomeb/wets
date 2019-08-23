@@ -85,6 +85,10 @@ void WETS_timerIsrCallback (void * unused);
 
 uint32_t WETS_getCurrentTime (void);
 
+void WETS_doBeforeSleep (void);
+
+void WETS_doAfterWakeUp (void);
+
 /*!
  * \}
  */
