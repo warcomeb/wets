@@ -216,7 +216,9 @@ void WETS_updateDelayEvents (void)
     for (uint8_t i = 0; i < WETS_MAX_DELAYED_EVENTS; i++)
     {
         // Whether the current time is greater than the timer timeout, set the event
-        if (currentTime >= mTimers[i].timeout)
+        if ((currentTime >= mTimers[i].timeout)       &&
+            (mTimers[i].priority != WETS_NO_PRIORITY) &&
+            (mTimers[i].event != WETS_NO_EVENT))
         {
             // Set the event
             WETS_addEvent(mTimers[i].cb, mTimers[i].priority, mTimers[i].event);
