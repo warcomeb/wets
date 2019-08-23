@@ -57,6 +57,11 @@ WETS_Error_t WETS_removeEvent (uint8_t priority, uint32_t event);
 bool WETS_isEvent (uint8_t priority, uint32_t event);
 
 /*!
+ * TODO
+ */
+void WETS_removeAllEvents (void);
+
+/*!
  * \}
  */
 

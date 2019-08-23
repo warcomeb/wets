@@ -112,7 +112,7 @@ WETS_Error_t WETS_addEvent (pEventCallback cb, uint8_t priority, uint32_t event)
         {
             for (uint8_t i = 0; i < WETS_MAX_EVENTS_PER_PRIORITY; ++i)
             {
-                if (mEvents[priority].event[i].event != WETS_NO_EVENT)
+                if (mEvents[priority].event[i].event == WETS_NO_EVENT)
                 {
                     CRITICAL_SECTION_BEGIN();
 
@@ -183,6 +183,23 @@ WETS_Error_t WETS_removeEvent (uint8_t priority, uint32_t event)
     return WETS_ERROR_WRONG_PARAMS;
 }
 
+void WETS_removeAllEvents (void)
+{
+    // Clear all event into the list
+    for (uint8_t i = 0; i < WETS_MAX_EVENTS_PER_PRIORITY; ++i)
+    {
+        CRITICAL_SECTION_BEGIN();
+        mEvents[i].status = 0ul;
+
+        for (uint8_t j = 0; j < WETS_MAX_EVENTS_PER_PRIORITY; ++j)
+        {
+            mEvents[i].event[j].cb    = NULL;
+            mEvents[i].event[j].event = WETS_NO_EVENT;
+        }
+        CRITICAL_SECTION_END();
+    }
+}
+
 bool WETS_isAnyEvent (void)
 {
     for (uint8_t i = 0; i < WETS_MAX_PRIORITY_LEVEL; ++i)
@@ -194,8 +211,8 @@ bool WETS_isAnyEvent (void)
 
 void WETS_init (void)
 {
-    // Initialize timers
-//    initTimer();
+    WETS_removeAllEvents();
+    WETS_removeAllDelayEvents();
 }
 
 void WETS_loop (void)
