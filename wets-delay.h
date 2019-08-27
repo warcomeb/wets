@@ -51,8 +51,12 @@
  * \param[in] priority: The priority group for the event.
  * \param[in]    event: The event to be notified.
  * \param[in]  timeout: The timeout value in milli-second.
- * \return The function return:
+ * \return The function returns:
  *         \arg \ref WETS_ERROR_SUCCESS when the delayed event was created.
+ *         \arg \ref WETS_ERROR_NO_TIMER_AVAILABLE when there isn't available
+ *                   spaces for the new delayed event (no new timer possible).
+ *         \arg \ref WETS_ERROR_WRONG_PARAMS when the function parameters
+ *                   is not valid.
  */
 WETS_Error_t WETS_addDelayEvent (pEventCallback cb,
                                  uint8_t priority,
@@ -67,42 +71,57 @@ WETS_Error_t WETS_addDelayEvent (pEventCallback cb,
  *
  * \param[in] priority: The priority group for the event.
  * \param[in]    event: The event to be notified.
- * \return The function return:
+ * \return The function returns:
  *         \arg \ref WETS_ERROR_SUCCESS when the delayed event was removed.
+ *         \arg \ref WETS_ERROR_NO_TIMER_FOUND when the dalayed event was not
+ *                   found.
+ *         \arg \ref WETS_ERROR_WRONG_PARAMS when the function parameters
+ *                   is not valid.
  */
 WETS_Error_t WETS_removeDelayEvent (uint8_t priority,
 		                            uint32_t event);
 
 /*!
- *
+ * This function update the timeout of the selected delayed event.
  *
  * \param[in] priority: The priority group for the event.
  * \param[in]    event: The event to be notified.
  * \param[in]  timeout: The new timeout for the event.
+ * \return The function returns:
+ *         \arg \ref WETS_ERROR_SUCCESS when the delayed event was removed.
+ *         \arg \ref WETS_ERROR_NO_TIMER_FOUND when the dalayed event was not
+ *                   found.
+ *         \arg \ref WETS_ERROR_WRONG_PARAMS when the function parameters
+ *                   is not valid.
  */
 WETS_Error_t WETS_updateDelayEvent (uint8_t priority,
                                     uint32_t event,
                                     uint32_t timeout);
 
 /*!
- * TODO
+ * This function clear all delayed events. It stop all timers.
  */
 void WETS_removeAllDelayEvents (void);
 
 /*!
- * TODO
+ * This function it is called inside the main loop of the scheduler (\ref WETS_loop())
+ * when the microcontroller's timer asserts the own interrupt.
+ *
+ * \note It not must be called in other cases.
  */
 void WETS_updateDelayEvents (void);
 
 
 /*!
- * TODO
+ * This function return the number of current active timers for generate
+ * delayed events.
+ *
+ * \return The number of current timers.
  */
 uint8_t WETS_getCurrentDelayEventsActive (void);
 
 /*!
  * \}
  */
-
 
 #endif // __WARCOMEB_WETS_DELAY_H

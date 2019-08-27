@@ -32,6 +32,11 @@
 #include "wets-delay.h"
 #include "wets-event.h"
 
+/*!
+ * \ingroup  WETS_DelayEvent
+ * \{
+ */
+
 #if !defined (WETS_MAX_DELAYED_EVENTS)
 #define WETS_MAX_DELAYED_EVENTS                  32u
 #endif
@@ -41,11 +46,13 @@
  */
 typedef struct _WETS_Timer
 {
+    /*!< The event priority. */
 	uint8_t priority;
 
     /*!< The event flag to wake-up the microcontroller when timer expire. */
     uint32_t event;
 
+    /*!< The callback that will be called when the event is fired. */
     pEventCallback cb;
 
     /*!< The timeout, in milli-second, of the timer. */
@@ -53,6 +60,9 @@ typedef struct _WETS_Timer
 
 } WETS_Timer_t;
 
+/*!
+ * The list of current active timers.
+ */
 static WETS_Timer_t mTimers[WETS_MAX_DELAYED_EVENTS];
 
 /*!
@@ -61,7 +71,12 @@ static WETS_Timer_t mTimers[WETS_MAX_DELAYED_EVENTS];
 static uint8_t mTimersRunning = 0;
 
 /*!
- * TODO
+ * The function searches whether there is an active timer that generates a
+ * specific event.
+ *
+ * \param[in] priority: The priority group for the event.
+ * \param[in]    event: The event to be searched.
+ * \return A pointer to the timer if it is found, NULL otherwise.
  */
 static WETS_Timer_t* findTimer (uint8_t priority, uint32_t event)
 {
@@ -102,6 +117,7 @@ WETS_Error_t WETS_addDelayEvent (pEventCallback cb,
             // If a timer is available
             if (timer != NULL)
             {
+                CRITICAL_SECTION_BEGIN();
                 timer->cb       = cb;
                 timer->priority = priority;
                 timer->event    = event;
@@ -109,6 +125,7 @@ WETS_Error_t WETS_addDelayEvent (pEventCallback cb,
 
                 // Increase the number of the current running timers.
                 mTimersRunning++;
+                CRITICAL_SECTION_END();
 
                 return WETS_ERROR_SUCCESS;
             }
@@ -146,7 +163,9 @@ WETS_Error_t WETS_updateDelayEvent (uint8_t priority,
         if (timer != NULL)
         {
             // Update timeout
+            CRITICAL_SECTION_BEGIN();
             timer->timeout  = WETS_getCurrentTime() + timeout;
+            CRITICAL_SECTION_END();
 
             return WETS_ERROR_SUCCESS;
         }
@@ -239,3 +258,7 @@ uint8_t WETS_getCurrentDelayEventsActive (void)
 {
     return mTimersRunning;
 }
+
+/*!
+ * \}
+ */
