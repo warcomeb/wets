@@ -82,7 +82,7 @@ WETS_Error_t WETS_removeDelayEvent (uint8_t priority,
 		                            uint32_t event);
 
 /*!
- * This function update the timeout of the selected delayed event.
+ * This function change the timeout of the selected delayed event.
  *
  * \param[in] priority: The priority group for the event.
  * \param[in]    event: The event to be notified.
@@ -94,9 +94,9 @@ WETS_Error_t WETS_removeDelayEvent (uint8_t priority,
  *         \arg \ref WETS_ERROR_WRONG_PARAMS when the function parameters
  *                   is not valid.
  */
-WETS_Error_t WETS_updateDelayEvent (uint8_t priority,
-                                    uint32_t event,
-                                    uint32_t timeout);
+WETS_Error_t WETS_editDelayEvent (uint8_t priority,
+                                  uint32_t event,
+                                  uint32_t timeout);
 
 /*!
  * This function clear all delayed events. It stop all timers.

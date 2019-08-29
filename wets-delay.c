@@ -144,9 +144,9 @@ WETS_Error_t WETS_addDelayEvent (pEventCallback cb,
     return WETS_ERROR_WRONG_PARAMS;
 }
 
-WETS_Error_t WETS_updateDelayEvent (uint8_t priority,
-                                    uint32_t event,
-                                    uint32_t timeout)
+WETS_Error_t WETS_editDelayEvent (uint8_t priority,
+                                  uint32_t event,
+                                  uint32_t timeout)
 {
     System_Errors err = ERRORS_NO_ERROR;
 
