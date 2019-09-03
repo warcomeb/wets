@@ -33,8 +33,6 @@
 #define __WARCOMEB_WETS_TYPES_H
 
 
-#include "libohiboard.h"
-
 #define WARCOMEB_WETS_LIBRARY_VERSION_MAJOR      (0x1ul)
 #define WARCOMEB_WETS_LIBRARY_VERSION_MINOR      (0x0ul)
 #define WARCOMEB_WETS_LIBRARY_VERSION_BUG        (0x0ul)

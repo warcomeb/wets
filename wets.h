@@ -37,12 +37,34 @@ extern "C" {
 #endif
 
 /*!
+ * \mainpage WETS - Warcomeb Easy Task Scheduler
+ *
+ * This library is developed in order to ...
+ *
+ * \section changelog ChangeLog
+ *
+ * \li v1.0.0 of 2019/08/xx - First release
+ *
+ * \section library External Library
+ *
+ * The library use the following external library:
+ * \li libohiboard https://github.com/ohilab/libohiboard a multiplatform C
+ * framework for multi microcontroller.
+ *
+ * \section example Example
+ *
+ * \section credits Credits
+ * \li Marco Giammarini (warcomeb)
+ */
+
+/*!
  * \defgroup WETS WETS Module APIs
  * \{
  */
 
 #include "wets-event.h"
 #include "wets-delay.h"
+#include "wets-cyclic.h"
 
 /*!
  * \}
@@ -53,4 +75,4 @@ extern "C" {
 }
 #endif
 
-#endif /* __WARCOMEB_WETS_H */
+#endif // __WARCOMEB_WETS_H
