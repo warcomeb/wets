@@ -31,6 +31,7 @@
 
 #include "wets-event.h"
 #include "wets-delay.h"
+#include "wets-cyclic.h"
 
 #define WETS_MAX_EVENTS_PER_PRIORITY             32u
 
@@ -213,6 +214,7 @@ void WETS_init (void)
 {
     WETS_removeAllEvents();
     WETS_removeAllDelayEvents();
+    WETS_removeAllCyclicEvents();
 }
 
 void WETS_loop (void)
@@ -265,7 +267,7 @@ void WETS_loop (void)
             if (mIsTimerFired)
             {
                 WETS_updateDelayEvents();
-//                WETS_updateCyclicEvents();
+                WETS_updateCyclicEvents();
                 mIsTimerFired = FALSE;
             }
         }
