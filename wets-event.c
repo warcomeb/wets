@@ -115,7 +115,9 @@ WETS_Error_t WETS_addEvent (pEventCallback cb, uint8_t priority, uint32_t event)
             {
                 if (mEvents[priority].event[i].event == WETS_NO_EVENT)
                 {
+#if (WETS_USE_CRITICAL_SECTION == 1)
                     CRITICAL_SECTION_BEGIN();
+#endif
 
                     // Add event...
                     mNewEventOccurred = TRUE;
@@ -125,7 +127,9 @@ WETS_Error_t WETS_addEvent (pEventCallback cb, uint8_t priority, uint32_t event)
 
                     mEvents[priority].status |= event;
 
+#if (WETS_USE_CRITICAL_SECTION == 1)
                     CRITICAL_SECTION_END();
+#endif
 
                     return WETS_ERROR_SUCCESS;
                 }
@@ -161,7 +165,9 @@ WETS_Error_t WETS_removeEvent (uint8_t priority, uint32_t event)
                 if ((mEvents[priority].event[i].event != WETS_NO_EVENT) &&
                    ((mEvents[priority].event[i].event & event) > 0))
                 {
+#if (WETS_USE_CRITICAL_SECTION == 1)
                     CRITICAL_SECTION_BEGIN();
+#endif
 
                     // Clear event...
                     mEvents[priority].event[i].event = WETS_NO_EVENT;
@@ -169,7 +175,9 @@ WETS_Error_t WETS_removeEvent (uint8_t priority, uint32_t event)
 
                     mEvents[priority].status &= ~event;
 
+#if (WETS_USE_CRITICAL_SECTION == 1)
                     CRITICAL_SECTION_END();
+#endif
 
                     return WETS_ERROR_SUCCESS;
                 }
@@ -187,9 +195,11 @@ WETS_Error_t WETS_removeEvent (uint8_t priority, uint32_t event)
 void WETS_removeAllEvents (void)
 {
     // Clear all event into the list
-    for (uint8_t i = 0; i < WETS_MAX_EVENTS_PER_PRIORITY; ++i)
+    for (uint8_t i = 0; i < WETS_MAX_PRIORITY_LEVEL; ++i)
     {
+#if (WETS_USE_CRITICAL_SECTION == 1)
         CRITICAL_SECTION_BEGIN();
+#endif
         mEvents[i].status = 0ul;
 
         for (uint8_t j = 0; j < WETS_MAX_EVENTS_PER_PRIORITY; ++j)
@@ -197,7 +207,9 @@ void WETS_removeAllEvents (void)
             mEvents[i].event[j].cb    = NULL;
             mEvents[i].event[j].event = WETS_NO_EVENT;
         }
+#if (WETS_USE_CRITICAL_SECTION == 1)
         CRITICAL_SECTION_END();
+#endif
     }
 }
 
@@ -233,19 +245,27 @@ void WETS_loop (void)
                 if (event != NULL)
                 {
                     uint32_t status = 0;
+#if (WETS_USE_CRITICAL_SECTION == 1)
                     CRITICAL_SECTION_BEGIN();
+#endif
                     status = mEvents[i].status;
                     mEvents[i].status = 0;
+#if (WETS_USE_CRITICAL_SECTION == 1)
                     CRITICAL_SECTION_END();
+#endif
 
                     status = event->cb(status);
 
+#if (WETS_USE_CRITICAL_SECTION == 1)
                     CRITICAL_SECTION_BEGIN();
+#endif
                     // Delete reference to this event...
                     event->event       = WETS_NO_EVENT;
                     event->cb          = NULL;
                     mEvents[i].status |= status;
+#if (WETS_USE_CRITICAL_SECTION == 1)
                     CRITICAL_SECTION_END();
+#endif
                     break;
                 }
             }
@@ -276,10 +296,14 @@ void WETS_loop (void)
 
 void WETS_timerIsrCallback (void * unused)
 {
+#if (WETS_USE_CRITICAL_SECTION == 1)
     CRITICAL_SECTION_BEGIN();
+#endif
     mCurrentTime += WETS_ISR_PERIOD_ms;
     mIsTimerFired = TRUE;
+#if (WETS_USE_CRITICAL_SECTION == 1)
     CRITICAL_SECTION_END();
+#endif
 }
 
 uint32_t WETS_getCurrentTime (void)

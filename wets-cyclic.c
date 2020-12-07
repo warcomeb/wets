@@ -119,7 +119,9 @@ WETS_Error_t WETS_addCyclicEvent (pEventCallback cb,
         // If a timer is available
         if (timer != NULL)
         {
+#if (WETS_USE_CRITICAL_SECTION == 1)
             CRITICAL_SECTION_BEGIN();
+#endif
             timer->cb       = cb;
             timer->priority = priority;
             timer->event    = event;
@@ -128,7 +130,9 @@ WETS_Error_t WETS_addCyclicEvent (pEventCallback cb,
 
             // Increase the number of the current running timers.
             mCyclicTimersRunning++;
+#if (WETS_USE_CRITICAL_SECTION == 1)
             CRITICAL_SECTION_END();
+#endif
 
             return WETS_ERROR_SUCCESS;
         }
@@ -161,10 +165,14 @@ WETS_Error_t WETS_editCyclicEvent (uint8_t priority,
         if (timer != NULL)
         {
             // Update timeout
+#if (WETS_USE_CRITICAL_SECTION == 1)
             CRITICAL_SECTION_BEGIN();
+#endif
             timer->timeout = WETS_getCurrentTime() + timeout;
             timer->delay   = timeout;
+#if (WETS_USE_CRITICAL_SECTION == 1)
             CRITICAL_SECTION_END();
+#endif
 
             return WETS_ERROR_SUCCESS;
         }
@@ -195,14 +203,18 @@ WETS_Error_t WETS_removeCyclicEvent (uint8_t priority, uint32_t event)
         // If a timer is available
         if (timer != NULL)
         {
+#if (WETS_USE_CRITICAL_SECTION == 1)
             CRITICAL_SECTION_BEGIN();
+#endif
             // Update timeout
             timer->cb       = NULL;
             timer->event    = WETS_NO_EVENT;
             timer->priority = WETS_NO_PRIORITY;
             timer->timeout  = 0;
             timer->delay    = 0;
+#if (WETS_USE_CRITICAL_SECTION == 1)
             CRITICAL_SECTION_END();
+#endif
 
             // Decrease the number of the current running timers.
             mCyclicTimersRunning--;
@@ -248,11 +260,14 @@ void WETS_updateCyclicEvents (void)
             // Set the event
             WETS_addEvent(mTimers[i].cb, mTimers[i].priority, mTimers[i].event);
 
+#if (WETS_USE_CRITICAL_SECTION == 1)
             CRITICAL_SECTION_BEGIN();
+#endif
             // Update the cyclic event's informations
             mTimers[i].timeout = currentTime + mTimers[i].delay;
+#if (WETS_USE_CRITICAL_SECTION == 1)
             CRITICAL_SECTION_END();
-
+#endif
         }
     }
 }

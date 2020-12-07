@@ -64,6 +64,11 @@
 #define WETS_MAX_PRIORITY_LEVEL                  4u
 #endif
 
+#if !defined (WETS_USE_CRITICAL_SECTION)
+#define WETS_USE_CRITICAL_SECTION                1u
+#endif
+
+
 /*!
  * List of all possible errors.
  */
@@ -86,7 +91,7 @@ typedef enum _WETS_Errors
  */
 typedef uint32_t (*pEventCallback)(uint32_t event);
 
-#define WETS_NO_EVENT                            0xFFFFFFFF
+#define WETS_NO_EVENT                            0xFFFFFFFFul
 #define WETS_NO_PRIORITY                         0xFF
 
 /*!

@@ -117,7 +117,9 @@ WETS_Error_t WETS_addDelayEvent (pEventCallback cb,
             // If a timer is available
             if (timer != NULL)
             {
+#if (WETS_USE_CRITICAL_SECTION == 1)
                 CRITICAL_SECTION_BEGIN();
+#endif
                 timer->cb       = cb;
                 timer->priority = priority;
                 timer->event    = event;
@@ -125,7 +127,9 @@ WETS_Error_t WETS_addDelayEvent (pEventCallback cb,
 
                 // Increase the number of the current running timers.
                 mTimersRunning++;
+#if (WETS_USE_CRITICAL_SECTION == 1)
                 CRITICAL_SECTION_END();
+#endif
 
                 return WETS_ERROR_SUCCESS;
             }
@@ -163,9 +167,13 @@ WETS_Error_t WETS_editDelayEvent (uint8_t priority,
         if (timer != NULL)
         {
             // Update timeout
+#if (WETS_USE_CRITICAL_SECTION == 1)
             CRITICAL_SECTION_BEGIN();
+#endif
             timer->timeout  = WETS_getCurrentTime() + timeout;
+#if (WETS_USE_CRITICAL_SECTION == 1)
             CRITICAL_SECTION_END();
+#endif
 
             return WETS_ERROR_SUCCESS;
         }
