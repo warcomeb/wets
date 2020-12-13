@@ -32,19 +32,27 @@
 #ifndef __WARCOMEB_WETS_TYPES_H
 #define __WARCOMEB_WETS_TYPES_H
 
-
-#define WARCOMEB_WETS_LIBRARY_VERSION_MAJOR      (0x1ul)
-#define WARCOMEB_WETS_LIBRARY_VERSION_MINOR      (0x0ul)
-#define WARCOMEB_WETS_LIBRARY_VERSION_BUG        (0x0ul)
-#define WARCOMEB_WETS_LIBRARY_VERSION            ((WARCOMEB_WETS_LIBRARY_VERSION_MAJOR << 16)\
-                                                 |(WARCOMEB_WETS_LIBRARY_VERSION_MINOR << 8 )\
-                                                 |(WARCOMEB_WETS_LIBRARY_VERSION_BUG        ))
-#define WARCOMEB_WETS_LIBRARY_TIME               0
-
 #ifndef __NO_PROFILES
 #include "board.h"
 #include "firmware.h"
 #endif
+
+// Library Version ------------------------------------------------------------
+
+#define WARCOMEB_WETS_LIBRARY_VERSION_MAJOR             1
+#define WARCOMEB_WETS_LIBRARY_VERSION_MINOR             0
+#define WARCOMEB_WETS_LIBRARY_VERSION_SUBMINOR          0
+#define WARCOMEB_WETS_LIBRARY_VERSION_TIME              0
+
+static const Utility_Version_t WARCOMEB_TCA9554_LIBRARY_VERSION =
+{
+    .f.major    = WARCOMEB_WETS_LIBRARY_VERSION_MAJOR,
+    .f.minor    = WARCOMEB_WETS_LIBRARY_VERSION_MINOR,
+    .f.subminor = WARCOMEB_WETS_LIBRARY_VERSION_SUBMINOR,
+    .f.time     = WARCOMEB_WETS_LIBRARY_VERSION_TIME,
+};
+
+// ------------------------------------------------------------ Library Version
 
 /*!
  * \defgroup WETS_Types WETS Types
