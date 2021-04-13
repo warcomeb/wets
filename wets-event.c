@@ -33,6 +33,11 @@
 #include "wets-delay.h"
 #include "wets-cyclic.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #define WETS_MAX_EVENTS_PER_PRIORITY             32u
 
 /*!
@@ -321,3 +326,6 @@ _weak void WETS_doAfterWakeUp (void)
     // WARNING: Must be implemented
 }
 
+#ifdef __cplusplus
+}
+#endif

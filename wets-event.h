@@ -32,8 +32,12 @@
 #ifndef __WARCOMEB_WETS_EVENT_H
 #define __WARCOMEB_WETS_EVENT_H
 
-
 #include "wets-types.h"
+
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 
 /*!
  * \defgroup WETS_Event WETS Events Management
@@ -92,5 +96,9 @@ void WETS_doAfterWakeUp (void);
 /*!
  * \}
  */
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // __WARCOMEB_WETS_EVENT_H

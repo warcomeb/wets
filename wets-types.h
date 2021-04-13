@@ -32,6 +32,11 @@
 #ifndef __WARCOMEB_WETS_TYPES_H
 #define __WARCOMEB_WETS_TYPES_H
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #ifndef __NO_PROFILES
 #include "board.h"
 #include "firmware.h"
@@ -44,14 +49,15 @@
 #define WARCOMEB_WETS_LIBRARY_VERSION_SUBMINOR          0
 #define WARCOMEB_WETS_LIBRARY_VERSION_TIME              0
 
-static const Utility_Version_t WARCOMEB_TCA9554_LIBRARY_VERSION =
+static const Utility_Version_t WARCOMEB_WETS_LIBRARY_VERSION =
 {
-    .f.major    = WARCOMEB_WETS_LIBRARY_VERSION_MAJOR,
-    .f.minor    = WARCOMEB_WETS_LIBRARY_VERSION_MINOR,
-    .f.subminor = WARCOMEB_WETS_LIBRARY_VERSION_SUBMINOR,
-    .f.time     = WARCOMEB_WETS_LIBRARY_VERSION_TIME,
+    {
+        WARCOMEB_WETS_LIBRARY_VERSION_MINOR,
+        WARCOMEB_WETS_LIBRARY_VERSION_MINOR,
+        WARCOMEB_WETS_LIBRARY_VERSION_SUBMINOR,
+        WARCOMEB_WETS_LIBRARY_VERSION_TIME
+    }
 };
-
 // ------------------------------------------------------------ Library Version
 
 /*!
@@ -106,5 +112,8 @@ typedef uint32_t (*pEventCallback)(uint32_t event);
  * \}
  */
 
+#ifdef __cplusplus
+}
+#endif
 
 #endif // __WARCOMEB_WETS_TYPES_H

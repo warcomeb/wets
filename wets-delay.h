@@ -32,6 +32,10 @@
 #ifndef __WARCOMEB_WETS_DELAY_H
 #define __WARCOMEB_WETS_DELAY_H
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 
 #include "wets-types.h"
 
@@ -123,5 +127,9 @@ uint8_t WETS_getCurrentDelayEventsActive (void);
 /*!
  * \}
  */
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // __WARCOMEB_WETS_DELAY_H

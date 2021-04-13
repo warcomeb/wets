@@ -32,6 +32,11 @@
 #include "wets-cyclic.h"
 #include "wets-event.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 /*!
  * \ingroup  WETS_CyclicEvent
  * \{
@@ -280,3 +285,7 @@ uint8_t WETS_getCurrentCyclicEventsActive (void)
 /*!
  * \}
  */
+
+#ifdef __cplusplus
+}
+#endif

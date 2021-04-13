@@ -32,6 +32,11 @@
 #include "wets-delay.h"
 #include "wets-event.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 /*!
  * \ingroup  WETS_DelayEvent
  * \{
@@ -270,3 +275,7 @@ uint8_t WETS_getCurrentDelayEventsActive (void)
 /*!
  * \}
  */
+
+#ifdef __cplusplus
+}
+#endif

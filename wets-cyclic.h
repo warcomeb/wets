@@ -32,6 +32,10 @@
 #ifndef __WARCOMEB_WETS_CYCLIC_H
 #define __WARCOMEB_WETS_CYCLIC_H
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 
 #include "wets-types.h"
 
@@ -114,5 +118,9 @@ void WETS_updateCyclicEvents (void);
 /*!
  * \}
  */
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // __WARCOMEB_WETS_CYCLIC_H
